@@ -2,64 +2,81 @@ from Controllers.ProductCRUD import *
 
 
 def main():
+    print("Welcome to Product Management System")
+    print("1. Create a product")
+    print("2. Update a product")
+    print("3. Delete a product")
+    print("4. Retrieve all products")
+    print("5. Get total number of products")
+    print("6. Get most expensive product")
+    print("7. Get least expensive product")
+    print("8. Get most common brand")
+    print("9. Get least common brand")
+    print("10. Get oldest product")
+    print("11. Get newest product")
+    print("12. Get product with highest quantity")
+    print("13. Get product with lowest quantity")
+    print("14. Search product by name")
+    print("15. Search product by brand")
+    print("0. Exit")
+
     while True:
-        print("\nStock Management System Menu:")
-        print("1. Add a new product")
-        print("2. Update product")
-        print("3. Delete product")
-        print("4. Retrieve products")
-        print("5. Total products")
-        print("6. Most expensive product")
-        print("7. Least expensive product")
-        print("8. Most common brand")
-        print("9. Least common brand")
-        print("10. Oldest product")
-        print("11. Newest product")
-        print("12. Product with highest quantity")
-        print("13. Product with lowest quantity")
-        print("14. Exit")
-
         choice = input("Enter your choice: ")
-
-        if choice == "1":
-            name = input("Enter product name : ")
-            brand = input("Enter product brand : ")
-            price = float(input("Enter product price : "))
-            quantity = int(input("Enter product quantity : "))
-            addedDate = input("Enter product addition date (YYYY-MM-DD) : ")
-            createProduct(Product(name=name, brand=brand, price=price, quantity=quantity, addedDate=addedDate))
-        elif choice == "2":
-            print("Update product : ", updateProduct())
-        elif choice == "3":
-            productID = input("Enter product ID : ")
-            print("Delete product : ", deleteProduct(productID))
-        elif choice == "4":
-            for product in getProducts():
-                print(product)
-        elif choice == "5":
-            print("Total products : ", totalProducts())
-        elif choice == "6":
-            print("Most expensive product : ", mostExpensive())
-        elif choice == "7":
-            print("Least expensive product : ", leastExpensive())
-        elif choice == "8":
-            print("Most common brand : ", mostCommonBrand())
-        elif choice == "9":
-            print("Least common brand : ", leasCommonBrand())
-        elif choice == "10":
-            print("Oldest product : ", oldestProduct())
-        elif choice == "11":
-            print("Newest product : ", newestProduct())
-        elif choice == "12":
-            print("Product with highest quantity : ", highestQuantity())
-        elif choice == "13":
-            print("Product with lowest quantity : ", lowestQuantity())
-        elif choice == "14":
-            print("Exiting...")
+        if choice == '1':
+            name = input("Enter product name: ")
+            brand = input("Enter product brand: ")
+            price = float(input("Enter product price: "))
+            quantity = int(input("Enter product quantity: "))
+            added_date = input("Enter product added date (YYYY-MM-DD): ")
+            createProduct(Product(name=name, brand=brand, price=price, quantity=quantity, addedDate=added_date))
+        elif choice == '2':
+            product_id = int(input("Enter product ID to update: "))
+            name = input("Enter new product name (leave blank to skip): ")
+            brand = input("Enter new product brand (leave blank to skip): ")
+            price = input("Enter new product price (leave blank to skip): ")
+            quantity = input("Enter new product quantity (leave blank to skip): ")
+            added_date = input("Enter new product added date (YYYY-MM-DD) (leave blank to skip): ")
+            updateProduct(productId=product_id, name=name, brand=brand, price=price, quantity=quantity,
+                          addedDate=added_date)
+        elif choice == '3':
+            product_id = int(input("Enter product ID to delete: "))
+            deleteProduct(product_id)
+        elif choice == '4':
+            products = getProducts()
+            if products:
+                for product in products:
+                    print(product)
+            else:
+                print("No products found.")
+        elif choice == '5':
+            print("Total products:", totalProducts())
+        elif choice == '6':
+            print("Most expensive product:", mostExpensive())
+        elif choice == '7':
+            print("Least expensive product:", leastExpensive())
+        elif choice == '8':
+            print("Most common brand:", mostCommonBrand())
+        elif choice == '9':
+            print("Least common brand:", leastCommonBrand())
+        elif choice == '10':
+            print("Oldest product:", oldestProduct())
+        elif choice == '11':
+            print("Newest product:", newestProduct())
+        elif choice == '12':
+            print("Product with highest quantity:", highestQuantity())
+        elif choice == '13':
+            print("Product with lowest quantity:", lowestQuantity())
+        elif choice == '14':
+            name = input("Enter product name to search: ")
+            print("Search result:", searchProductByName(name))
+        elif choice == '15':
+            brand = input("Enter product brand to search: ")
+            print("Search result:", searchProductByBrand(brand))
+        elif choice == 'q':
+            print("Exiting program.")
             break
         else:
-            print("Invalid choice. Please enter a number from 1 to 14.")
-    conn.close()
+            print("Invalid choice. Please enter a number between 0 and 15.")
 
 
 if __name__ == "__main__":

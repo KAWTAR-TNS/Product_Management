@@ -18,8 +18,27 @@ def createProduct(product: Product):
 
 # endregion
 
+# region Retrieve products
+def getProducts() -> list[Product] | None:
+    try:
+        cursor.execute("SELECT * FROM Products")
+        productsList = []
+        products = cursor.fetchall()
+        if products:
+            for product in products:
+                productsList.append(Product(ID=product[0], name=product[1], brand=product[2],
+                                            price=product[3], quantity=product[4], addedDate=product[5]))
+            return productsList
+        else:
+            return None
+    except sqlite3.Error as e:
+        print("Error while retrieving products : ", e)
+
+
+# endregion
+
 # region update product
-def updateProduct(productId: str = None, name: str = None,
+def updateProduct(productId: int = 0, name: str = None,
                   brand: str = None, price: str = None,
                   quantity: str = None, addedDate: str = None):
     try:
@@ -34,6 +53,9 @@ def updateProduct(productId: str = None, name: str = None,
         if price:
             sql += "price = ?, "
             parameters.append(price)
+        if quantity:
+            sql += "quantity = ?, "
+            parameters.append(quantity)
         if addedDate:
             sql += "addedDate = ?, "
             parameters.append(addedDate)
@@ -60,24 +82,6 @@ def deleteProduct(productId):
 
 # endregion
 
-# region Retrieve products
-def getProducts() -> list[Product] | None:
-    try:
-        cursor.execute("SELECT * FROM Products")
-        productsList = []
-        products = cursor.fetchall()
-        if products:
-            for product in products:
-                productsList.append(Product(ID=product[0], name=product[1], brand=product[2],
-                                            price=product[3], quantity=product[4], addedDate=product[5]))
-            return productsList
-        else:
-            return None
-    except sqlite3.Error as e:
-        print("Error while retrieving products : ", e)
-
-
-# endregion
 
 # region Total products
 def totalProducts():
