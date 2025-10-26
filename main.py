@@ -1,4 +1,5 @@
 from Controllers.ProductCRUD import *
+from ProductMenu import leastCommonBrand
 
 
 def main():
@@ -27,8 +28,7 @@ def main():
             brand = input("Enter product brand: ")
             price = float(input("Enter product price: "))
             quantity = int(input("Enter product quantity: "))
-            added_date = input("Enter product added date (YYYY-MM-DD): ")
-            createProduct(Product(name=name, brand=brand, price=price, quantity=quantity, addedDate=added_date))
+            createProduct(Product(name=name, brand=brand, price=price, quantity=quantity))
         elif choice == '2':
             product_id = int(input("Enter product ID to update: "))
             name = input("Enter new product name (leave blank to skip): ")

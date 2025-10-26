@@ -15,7 +15,7 @@ class Fournisseur:
         self.__lastName: str = lastName
         self.__tele: str = tele
         self.__email: str = email
-        self.city: str = city
+        self.__city: str = city
         self.__country: str = country
 
     # region getters!!!
@@ -41,7 +41,7 @@ class Fournisseur:
 
     @property
     def city(self):
-        return self.city
+        return self.__city
 
     @property
     def country(self):
@@ -68,7 +68,7 @@ class Fournisseur:
 
     @city.setter
     def city(self, city: str):
-        self.city: str = city
+        self.__city: str = city
 
     @country.setter
     def country(self, country: str):

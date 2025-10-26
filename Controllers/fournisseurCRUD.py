@@ -71,6 +71,8 @@ def updateFournisseur(ID: int = 0, firstName: str = None,
             print("Fournisseur mis à jour avec succès.")
     except sqlite3.Error as e:
         print("Erreur lors de la mise à jour du fournisseur:", e)
+
+
 # endregion
 
 # region deleteFournisseur
@@ -81,4 +83,20 @@ def deleteFournisseur(ID):
         print("Fournisseur supprimé avec succès.")
     except sqlite3.Error as e:
         print("Erreur lors de la suppression du fournisseur:", e)
+
+
+# endregion
+
+# region getFournisseur by ID
+def getFournisseur(ID: int) -> Fournisseur | None:
+    try:
+        cursor.execute("SELECT * FROM Fournisseurs WHERE ID=?", (ID,))
+        fournisseur = cursor.fetchone()
+        if fournisseur:
+            return Fournisseur(ID=fournisseur[0], firstName=fournisseur[1], lastName=fournisseur[2],
+                               tele=fournisseur[3], email=fournisseur[4], city=fournisseur[5], country=fournisseur[6])
+        else:
+            return None
+    except sqlite3.Error as e:
+        print("Erreur lors de la récupération du fournisseur :", e)
 # endregion

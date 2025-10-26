@@ -6,9 +6,9 @@ def createProduct(product: Product):
     try:
         cursor.execute(
             """
-                INSERT INTO products (name, brand, price, quantity, addedDate) VALUES (?, ?, ?, ?, ?)
+                INSERT INTO products (name, brand, price, quantity) VALUES (?, ?, ?, ?)
             """,
-            (product.name, product.brand, product.price, product.quantity, product.addedDate)
+            (product.name, product.brand, product.price, product.quantity)
         )
         conn.commit()
         print("Product created successfully!!!")
@@ -27,7 +27,7 @@ def getProducts() -> list[Product] | None:
         if products:
             for product in products:
                 productsList.append(Product(ID=product[0], name=product[1], brand=product[2],
-                                            price=product[3], quantity=product[4], addedDate=product[5]))
+                                            price=product[3], quantity=product[4]))
             return productsList
         else:
             return None
@@ -38,9 +38,9 @@ def getProducts() -> list[Product] | None:
 # endregion
 
 # region update product
-def updateProduct(productId: int = 0, name: str = None,
+def updateProduct(productID: int = 0, name: str = None,
                   brand: str = None, price: str = None,
-                  quantity: str = None, addedDate: str = None):
+                  quantity: str = None):
     try:
         sql: str = "UPDATE PRODUCTS SET "
         parameters = []
@@ -56,12 +56,9 @@ def updateProduct(productId: int = 0, name: str = None,
         if quantity:
             sql += "quantity = ?, "
             parameters.append(quantity)
-        if addedDate:
-            sql += "addedDate = ?, "
-            parameters.append(addedDate)
         sql = sql[:-2]
         sql += " WHERE ID = ?"
-        parameters.append(productId)
+        parameters.append(productID)
         if cursor.execute(sql, tuple(parameters)):
             conn.commit()
     except sqlite3.Error as e:
@@ -78,6 +75,55 @@ def deleteProduct(productId):
         conn.commit()
     except sqlite3.Error as e:
         print("Error while deleting product : ", e)
+
+
+# endregion
+
+# region Get product by ID
+def getProduct(id: int) -> Product | None:
+    try:
+        cursor.execute("SELECT * FROM products WHERE ID=?", (id,))
+        product = cursor.fetchone()
+        if product:
+            return Product(ID=product[0], name=product[1], brand=product[2], price=product[3], quantity=product[4])
+        else:
+            return None
+    except sqlite3.Error as e:
+        print("Error while getting product by ID:", e)
+
+
+# endregion
+
+# region increaseProductQuantity
+def increaseProductQuantity(productId: int, quantityToAdd: int):
+    try:
+        # Retrieve the current quantity of the product
+        currentQuantity = cursor.execute("SELECT quantity FROM products WHERE ID=?", (productId,)).fetchone()[0]
+        # Calculate the new quantity by adding the specified quantity to the current quantity
+        newQuantity = currentQuantity + quantityToAdd
+        # Update the product with the new quantity
+        cursor.execute("UPDATE products SET quantity=? WHERE ID=?", (newQuantity, productId))
+        conn.commit()
+        print("Product quantity updated successfully!!!")
+    except sqlite3.Error as e:
+        print("Error while updating product quantity: ", e)
+
+
+# endregion
+
+# region Decrease product quantity
+def decreaseProductQuantity(productId: int, quantityToSubtract: int):
+    try:
+        currentQuantity = cursor.execute("SELECT quantity FROM products WHERE ID=?", (productId,)).fetchone()[0]
+        if currentQuantity >= quantityToSubtract:
+            newQuantity = currentQuantity - quantityToSubtract
+            cursor.execute("UPDATE products SET quantity=? WHERE ID=?", (newQuantity, productId))
+            conn.commit()
+            print("Product quantity decreased successfully!!!")
+        else:
+            print("Not enough quantity available to subtract.")
+    except sqlite3.Error as e:
+        print("Error while updating product quantity: ", e)
 
 
 # endregion
