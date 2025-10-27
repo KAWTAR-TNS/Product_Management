@@ -6,8 +6,6 @@
 ## Fonctionnalités
 *   Suivi des fonctionnalités et de leur état.
 *   Gestion des retours utilisateurs.
-*   Analyse des données via des requêtes MySQL.
-
 ## Installation
 
 ### Prérequis
